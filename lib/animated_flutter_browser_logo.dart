@@ -42,7 +42,7 @@ class _AnimatedFlutterBrowserLogoState extends State<AnimatedFlutterBrowserLogo>
         height: widget.size,
         width: widget.size,
         child: const CircleAvatar(
-            backgroundImage: AssetImage("assets/icon/icon.png")),
+            backgroundImage: AssetImage("assets/icons/flutter_browser_icon.png")),
       ),
     );
   }

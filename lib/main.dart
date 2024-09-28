@@ -11,6 +11,10 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 import 'browser.dart';
 
+
+/// Have the webview variables be initialized
+// ignore: non_constant_identifier_names
+bool WEBBROWSER_INITIALIZED = false;
 // ignore: non_constant_identifier_names
 late final String WEB_ARCHIVE_DIR;
 // ignore: non_constant_identifier_names

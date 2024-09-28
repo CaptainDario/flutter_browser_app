@@ -344,9 +344,9 @@ class _WebViewTabAppBarState extends State<WebViewTabAppBar>
               child: StatefulBuilder(
                 builder: (statefulContext, setState) {
                   var browserModel =
-                      Provider.of<BrowserModel>(statefulContext, listen: true);
+                      Provider.of<BrowserModel>(context, listen: true);
                   var webViewModel =
-                      Provider.of<WebViewModel>(statefulContext, listen: true);
+                      Provider.of<WebViewModel>(context, listen: true);
                   var webViewController = webViewModel.webViewController;
 
                   var isFavorite = false;
@@ -586,17 +586,11 @@ class _WebViewTabAppBarState extends State<WebViewTabAppBar>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(choice),
-                        Selector<WebViewModel, bool>(
-                          selector: (context, webViewModel) =>
-                              webViewModel.isDesktopMode,
-                          builder: (context, value, child) {
-                            return Icon(
-                              value
-                                  ? Icons.check_box
-                                  : Icons.check_box_outline_blank,
-                              color: Colors.black,
-                            );
-                          },
+                        Icon(
+                          Provider.of<WebViewModel>(context, listen: false).isDesktopMode
+                            ? Icons.check_box
+                            : Icons.check_box_outline_blank,
+                          color: Colors.black,
                         )
                       ]),
                 );
@@ -995,6 +989,7 @@ class _WebViewTabAppBarState extends State<WebViewTabAppBar>
   }
 
   void toggleDesktopMode() async {
+
     var browserModel = Provider.of<BrowserModel>(context, listen: false);
     var webViewModel = browserModel.getCurrentTab()?.webViewModel;
     var webViewController = webViewModel?.webViewController;

@@ -62,7 +62,7 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin {
       _isRestored = true;
       restore();
     }
-    precacheImage(const AssetImage("assets/icon/icon.png"), context);
+    precacheImage(const AssetImage("assets/icons/flutter_browser_icon.png"), context);
   }
 
   @override
@@ -130,7 +130,8 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin {
             }
           },
           child: Scaffold(
-              appBar: const BrowserAppBar(), body: _buildWebViewTabsContent()),
+              appBar: const BrowserAppBar(),
+              body: _buildWebViewTabsContent()),
         ));
   }
 
