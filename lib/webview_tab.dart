@@ -181,7 +181,8 @@ class _WebViewTabState extends State<WebViewTab> with WidgetsBindingObserver {
       keepAlive: widget.webViewModel.keepAlive,
       webViewEnvironment: webViewEnvironment,
       initialUrlRequest: URLRequest(url: widget.webViewModel.url),
-      initialSettings: initialSettings,
+      initialSettings: initialSettings
+        ..javaScriptEnabled = true,
       windowId: widget.webViewModel.windowId,
       pullToRefreshController: _pullToRefreshController,
       findInteractionController: _findInteractionController,
@@ -190,6 +191,17 @@ class _WebViewTabState extends State<WebViewTab> with WidgetsBindingObserver {
         await controller.setSettings(settings: initialSettings);
 
         _webViewController = controller;
+        // Adding a JavaScript handler to capture tapped text and index
+        controller.addJavaScriptHandler(handlerName: 'onTextTapped', callback: (args) {
+          String tappedText = args[0];  // Text that was tapped
+          int charIndex = args[1];  // Character index in the text
+
+          print("Tapped Text: $tappedText");
+          print("Character Index: $charIndex");
+          print("Tapped char: ${tappedText[charIndex]}");
+
+          // You can handle the tapped text and index here
+        });
         widget.webViewModel.webViewController = controller;
         widget.webViewModel.pullToRefreshController = _pullToRefreshController;
         widget.webViewModel.findInteractionController =
@@ -283,6 +295,39 @@ class _WebViewTabState extends State<WebViewTab> with WidgetsBindingObserver {
               );
           widget.webViewModel.screenshot = await screenshotData;
         }
+
+        // Inject JavaScript after the page loads to detect tap events
+        await controller.evaluateJavascript(source: """
+          document.addEventListener('click', function(event) {
+              var range;
+              
+              // Get the caret position at the point where the user clicked
+              if (document.caretRangeFromPoint) {
+                  range = document.caretRangeFromPoint(event.clientX, event.clientY);
+              } else if (document.caretPositionFromPoint) {
+                  range = document.caretPositionFromPoint(event.clientX, event.clientY);
+              }
+
+              if (range) {
+                  var clickedNode = range.startContainer;
+                  var charIndex = range.startOffset;
+
+                  // Handle cases where the clicked node is part of an <a> or other inline element
+                  while (clickedNode && clickedNode.nodeType !== Node.TEXT_NODE) {
+                      clickedNode = clickedNode.firstChild;
+                  }
+
+                  if (clickedNode) {
+                      var tappedText = clickedNode.textContent;
+
+                      if (tappedText) {
+                          // Send the text and the character index to Flutter
+                          window.flutter_inappwebview.callHandler('onTextTapped', tappedText, charIndex);
+                      }
+                  }
+              }
+          });
+        """);
       },
       onProgressChanged: (controller, progress) {
         if (progress == 100) {
