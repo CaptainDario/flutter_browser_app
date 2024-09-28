@@ -47,7 +47,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       width: 25,
                       height: 25,
                       child: CircleAvatar(
-                        backgroundImage: AssetImage("assets/icons/flutter_browser_icon.png"),
+                        backgroundImage: AssetImage("assets/icon/icon.png"),
                       ),
                     ),
                   ),

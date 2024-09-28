@@ -202,7 +202,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
           width: 35,
           margin: const EdgeInsets.only(top: 6.0, left: 6.0),
           child: const CircleAvatar(
-              backgroundImage: AssetImage("assets/icons/flutter_browser_icon.png")),
+              backgroundImage: AssetImage("assets/icon/icon.png")),
         ),
         title: const Text("Flutter InAppWebView Project"),
         subtitle: const Text(
